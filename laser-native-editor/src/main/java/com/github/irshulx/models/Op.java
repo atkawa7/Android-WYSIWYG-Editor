@@ -1,6 +1,6 @@
 package com.github.irshulx.models;
 
-public enum Op{
+public enum Op {
     Insert,
     Delete,
     Update

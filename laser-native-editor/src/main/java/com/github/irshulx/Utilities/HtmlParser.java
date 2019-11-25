@@ -12,15 +12,15 @@ import com.github.irshulx.models.HtmlTag;
 
 
 public class HtmlParser {
-    private Context context;
     LinearLayout parentView;
-    public HtmlParser(Context _context){
-        this.context=_context;
-        parentView=new LinearLayout(this.context);
+    private Context context;
+
+    public HtmlParser(Context _context) {
+        this.context = _context;
+        parentView = new LinearLayout(this.context);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         parentView.setLayoutParams(params);
     }
-
 
 
     public static boolean matchesTag(String test) {

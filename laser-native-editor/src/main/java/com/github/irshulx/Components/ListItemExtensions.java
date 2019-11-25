@@ -60,11 +60,16 @@ import static com.github.irshulx.Components.InputExtensions.CONTENT;
  * Created by mkallingal on 5/1/2016.
  */
 public class ListItemExtensions extends EditorComponent {
-    EditorCore editorCore;
     public static final int POSITION_START = 0;
     public static final int POSITION_END = 1;
+    EditorCore editorCore;
     private int listItemTemplate = R.layout.tmpl_list_item;
     private float lineSpacing = -1;
+
+    public ListItemExtensions(EditorCore editorCore) {
+        super(editorCore);
+        this.editorCore = editorCore;
+    }
 
     @Override
     public Node getContent(View view) {
@@ -117,12 +122,6 @@ public class ListItemExtensions extends EditorComponent {
         this.componentsWrapper = componentsWrapper;
     }
 
-
-    public ListItemExtensions(EditorCore editorCore) {
-        super(editorCore);
-        this.editorCore = editorCore;
-    }
-
     public void setListItemTemplate(int drawable) {
         this.listItemTemplate = drawable;
     }
@@ -157,7 +156,8 @@ public class ListItemExtensions extends EditorComponent {
         if (editorCore.getRenderType() == RenderType.Editor) {
             editText.setTextSize(TypedValue.COMPLEX_UNIT_SP, componentsWrapper.getInputExtensions().getNormalTextSize());
             editText.setTextColor(Color.parseColor(componentsWrapper.getInputExtensions().getDefaultTextColor()));
-            if(this.lineSpacing != -1) componentsWrapper.getInputExtensions().setLineSpacing(editText, this.lineSpacing);
+            if (this.lineSpacing != -1)
+                componentsWrapper.getInputExtensions().setLineSpacing(editText, this.lineSpacing);
             EditorControl tag = editorCore.createTag(isOrdered ? EditorType.OL_LI : EditorType.UL_LI);
             tag.textSettings = new TextSettings(componentsWrapper.getInputExtensions().getDefaultTextColor());
             editText.setTag(tag);
@@ -255,9 +255,10 @@ public class ListItemExtensions extends EditorComponent {
                 componentsWrapper.getInputExtensions().setText(textView, text);
             }
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, componentsWrapper.getInputExtensions().getNormalTextSize());
-            if(this.lineSpacing != -1) componentsWrapper.getInputExtensions().setLineSpacing(textView, this.lineSpacing);
+            if (this.lineSpacing != -1)
+                componentsWrapper.getInputExtensions().setLineSpacing(textView, this.lineSpacing);
             textView.setVisibility(View.VISIBLE);
-            Linkify.addLinks(textView,Linkify.ALL);
+            Linkify.addLinks(textView, Linkify.ALL);
             editText.setVisibility(View.GONE);
         }
         layout.addView(childLayout);
@@ -539,15 +540,15 @@ public class ListItemExtensions extends EditorComponent {
                 listItemView = addListItem(_layout, item.type == EditorType.ol, item.childs.get(i).content.get(0));
             }
 
-            if(i==0){
+            if (i == 0) {
                 listItemView = _layout;
             }
 
             TextView tv;
 
-            if(editorCore.getRenderType() == RenderType.Renderer) {
+            if (editorCore.getRenderType() == RenderType.Renderer) {
                 tv = listItemView.findViewById(R.id.lblText);
-            }else {
+            } else {
                 tv = listItemView.findViewById(R.id.txtText);
             }
 
@@ -558,7 +559,7 @@ public class ListItemExtensions extends EditorComponent {
                     componentsWrapper.getInputExtensions().UpdateTextStyle(style, tv);
                 }
             }
-            if(!TextUtils.isEmpty(item.childs.get(i).textSettings.getTextColor())) {
+            if (!TextUtils.isEmpty(item.childs.get(i).textSettings.getTextColor())) {
                 tv.setTextColor(Color.parseColor(item.childs.get(i).textSettings.getTextColor()));
             }
         }

@@ -17,7 +17,6 @@
 package com.github.irshulx.Components;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.text.Editable;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,6 +30,7 @@ import com.github.irshulx.models.EditorControl;
 import com.github.irshulx.models.EditorType;
 import com.github.irshulx.models.Node;
 import com.github.irshulx.models.RenderType;
+
 import org.jsoup.nodes.Element;
 
 /**
@@ -38,7 +38,12 @@ import org.jsoup.nodes.Element;
  */
 public class MapExtensions extends EditorComponent {
     EditorCore editorCore;
-    private int mapExtensionTemplate=R.layout.tmpl_image_view;
+    private int mapExtensionTemplate = R.layout.tmpl_image_view;
+
+    public MapExtensions(EditorCore editorCore) {
+        super(editorCore);
+        this.editorCore = editorCore;
+    }
 
     @Override
     public Node getContent(View view) {
@@ -52,8 +57,8 @@ public class MapExtensions extends EditorComponent {
 
     @Override
     public String getContentAsHTML(Node node, EditorContent content) {
-      return componentsWrapper.getHtmlExtensions().getTemplateHtml(node.type).replace("{{$content}}",
-              componentsWrapper.getMapExtensions().getCordsAsUri(node.content.get(0))).replace("{{$desc}}", node.content.get(1));
+        return componentsWrapper.getHtmlExtensions().getTemplateHtml(node.type).replace("{{$content}}",
+                componentsWrapper.getMapExtensions().getCordsAsUri(node.content.get(0))).replace("{{$desc}}", node.content.get(1));
     }
 
     @Override
@@ -71,32 +76,25 @@ public class MapExtensions extends EditorComponent {
         this.componentsWrapper = componentsWrapper;
     }
 
-    public MapExtensions(EditorCore editorCore){
-        super(editorCore);
-        this.editorCore = editorCore;
-    }
-
-    public void setMapViewTemplate(int drawable)
-    {
-        this.mapExtensionTemplate= drawable;
+    public void setMapViewTemplate(int drawable) {
+        this.mapExtensionTemplate = drawable;
     }
 
 
-
-    public String getMapStaticImgUri(String cords, int width){
+    public String getMapStaticImgUri(String cords, int width) {
         StringBuilder builder = new StringBuilder();
         builder.append("http://maps.google.com/maps/api/staticmap?");
-        builder.append("size="+String.valueOf(width)+"x400&zoom=15&sensor=true&markers="+cords);
+        builder.append("size=" + String.valueOf(width) + "x400&zoom=15&sensor=true&markers=" + cords);
         return builder.toString();
     }
 
     public void insertMap(String cords, String desc, boolean insertEditText) {
 //        String image="http://maps.googleapis.com/maps/api/staticmap?center=43.137022,13.067162&zoom=16&size=600x400&maptype=roadmap&sensor=true&markers=color:blue|43.137022,13.067162";
-        String[] x= cords.split(",");
+        String[] x = cords.split(",");
         String lat = x[0];
         String lng = x[1];
-        int[]size= Utilities.getScreenDimension(editorCore.getContext());
-        int width=size[0];
+        int[] size = Utilities.getScreenDimension(editorCore.getContext());
+        int width = size[0];
 //        ImageView imageView = new ImageView(context);
 //        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 400);
 //        params.bottomMargin=12;
@@ -106,13 +104,13 @@ public class MapExtensions extends EditorComponent {
 
         final View childLayout = ((Activity) this.editorCore.getContext()).getLayoutInflater().inflate(this.mapExtensionTemplate, null);
         ImageView imageView = childLayout.findViewById(R.id.imageView);
-        componentsWrapper.getImageExtensions().loadImageUsingLib(getMapStaticImgUri(String.valueOf(lat)+","+String.valueOf(lng),width), imageView);
+        componentsWrapper.getImageExtensions().loadImageUsingLib(getMapStaticImgUri(String.valueOf(lat) + "," + String.valueOf(lng), width), imageView);
 
         /**
          * description, if render mode, set the description and disable it
          */
         CustomEditText editText = childLayout.findViewById(R.id.desc);
-        if(editorCore.getRenderType()== RenderType.Renderer){
+        if (editorCore.getRenderType() == RenderType.Renderer) {
             editText.setText(desc);
             editText.setEnabled(false);
         }
@@ -120,7 +118,7 @@ public class MapExtensions extends EditorComponent {
          *  remove button
          */
 
-        final View btn =  childLayout.findViewById(R.id.btn_remove);
+        final View btn = childLayout.findViewById(R.id.btn_remove);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,21 +138,21 @@ public class MapExtensions extends EditorComponent {
             }
         });
         EditorControl control = editorCore.createTag(EditorType.map);
-        control.Cords= cords;
+        control.Cords = cords;
         childLayout.setTag(control);
-        int Index= editorCore.determineIndex(EditorType.map);
+        int Index = editorCore.determineIndex(EditorType.map);
         editorCore.getParentView().addView(childLayout, Index);
-        if(insertEditText){
-          componentsWrapper.getInputExtensions().insertEditText(Index + 1, null, null);
+        if (insertEditText) {
+            componentsWrapper.getInputExtensions().insertEditText(Index + 1, null, null);
         }
     }
 
-    public void loadMapActivity(){
-               // Intent intent=new Intent(this.editorCore.getContext(), MapsActivity.class);
-               // ((Activity) this.editorCore.getContext()).startActivityForResult(intent, 123);
+    public void loadMapActivity() {
+        // Intent intent=new Intent(this.editorCore.getContext(), MapsActivity.class);
+        // ((Activity) this.editorCore.getContext()).startActivityForResult(intent, 123);
     }
 
     public CharSequence getCordsAsUri(String s) {
-        return getMapStaticImgUri(s,800);
+        return getMapStaticImgUri(s, 800);
     }
 }

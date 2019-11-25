@@ -20,15 +20,12 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.irshulx.EditorComponent;
-import com.github.irshulx.R;
 import com.github.irshulx.EditorCore;
+import com.github.irshulx.R;
 import com.github.irshulx.models.EditorContent;
-import com.github.irshulx.models.EditorControl;
 import com.github.irshulx.models.EditorType;
 import com.github.irshulx.models.Node;
 import com.github.irshulx.models.RenderType;
@@ -39,8 +36,13 @@ import org.jsoup.nodes.Element;
  * Created by mkallingal on 5/1/2016.
  */
 public class DividerExtensions extends EditorComponent {
-    private int dividerLayout = R.layout.tmpl_divider_layout;
     EditorCore editorCore;
+    private int dividerLayout = R.layout.tmpl_divider_layout;
+
+    public DividerExtensions(EditorCore editorCore) {
+        super(editorCore);
+        this.editorCore = editorCore;
+    }
 
     @Override
     public Node getContent(View view) {
@@ -70,12 +72,6 @@ public class DividerExtensions extends EditorComponent {
         this.componentsWrapper = componentsWrapper;
     }
 
-
-    public DividerExtensions(EditorCore editorCore) {
-        super(editorCore);
-        this.editorCore = editorCore;
-    }
-
     public void setDividerLayout(int layout) {
         this.dividerLayout = layout;
     }
@@ -94,8 +90,8 @@ public class DividerExtensions extends EditorComponent {
 
         if (editorCore.getRenderType() == RenderType.Editor) {
 
-            if (editorCore.getControlType(editorCore.getParentView().getChildAt(index + 1 )) == EditorType.INPUT) {
-                CustomEditText customEditText = (CustomEditText) editorCore.getChildAt(index + 1 );
+            if (editorCore.getControlType(editorCore.getParentView().getChildAt(index + 1)) == EditorType.INPUT) {
+                CustomEditText customEditText = (CustomEditText) editorCore.getChildAt(index + 1);
                 componentsWrapper.getInputExtensions().removeFocus(customEditText);
             }
             view.setOnTouchListener(new View.OnTouchListener() {
@@ -118,11 +114,11 @@ public class DividerExtensions extends EditorComponent {
 
             View focus = editorCore.getActivity().getCurrentFocus();
             if (focus != null) {
-                InputMethodManager imm = (InputMethodManager)editorCore.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) editorCore.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-                if(focus instanceof CustomEditText){
-                    CustomEditText editText = (CustomEditText)focus;
+                if (focus instanceof CustomEditText) {
+                    CustomEditText editText = (CustomEditText) focus;
                     editText.clearFocus();
                     editorCore.getParentView().requestFocus();
                 }
@@ -133,7 +129,7 @@ public class DividerExtensions extends EditorComponent {
 
     public boolean deleteHr(int indexOfDeleteItem) {
         View view = editorCore.getParentView().getChildAt(indexOfDeleteItem);
-        if (view == null ||editorCore.getControlType(view) == EditorType.hr) {
+        if (view == null || editorCore.getControlType(view) == EditorType.hr) {
             editorCore.getParentView().removeView(view);
             return true;
         }
@@ -141,8 +137,8 @@ public class DividerExtensions extends EditorComponent {
     }
 
     public void removeAllDividersBetweenDeletedAndFocusNext(int indexOfDeleteItem, int nextFocusIndex) {
-        for(int i = nextFocusIndex; i <indexOfDeleteItem;i++){
-            if (editorCore.getControlType(editorCore.getParentView().getChildAt(i)) == EditorType.hr){
+        for (int i = nextFocusIndex; i < indexOfDeleteItem; i++) {
+            if (editorCore.getControlType(editorCore.getParentView().getChildAt(i)) == EditorType.hr) {
                 editorCore.getParentView().removeViewAt(i);
             }
         }

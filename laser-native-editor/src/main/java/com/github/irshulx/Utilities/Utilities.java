@@ -21,11 +21,11 @@ public class Utilities {
         return dimen;
     }
 
-    public static void toastItOut(Context context,String message) {
+    public static void toastItOut(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    public static boolean containsString(String text){
+    public static boolean containsString(String text) {
         String HTML_PATTERN = "<(\"[^\"]*\"|'[^']*'|[^'\">])*>";
         Pattern pattern = Pattern.compile(HTML_PATTERN);
         Matcher matcher = pattern.matcher(text);
@@ -38,7 +38,7 @@ public class Utilities {
         return (int) px;
     }
 
-    public static int pxToDp(Context context, float px){
+    public static int pxToDp(Context context, float px) {
         return (int) (px / context.getResources().getDisplayMetrics().density);
     }
 }

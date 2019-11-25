@@ -3,19 +3,22 @@ package com.github.irshulx.Components;
 /**
  * Created by mkallingal on 4/25/2016.
  */
+
 import android.content.Context;
-import android.support.design.widget.TextInputEditText;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputConnectionWrapper;
-import android.widget.EditText;
+
+import com.google.android.material.textfield.TextInputEditText;
+
 /**
  * Created by mkallingal on 4/25/2016.
  */
 public class CustomEditText extends TextInputEditText {
-    public static final int KEYCODE_REMOVE=100;
+    public static final int KEYCODE_REMOVE = 100;
+
     public CustomEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
@@ -27,7 +30,6 @@ public class CustomEditText extends TextInputEditText {
     public CustomEditText(Context context) {
         super(context);
     }
-
 
 
     @Override
@@ -44,11 +46,11 @@ public class CustomEditText extends TextInputEditText {
 
         @Override
         public boolean sendKeyEvent(KeyEvent event) {
-           if(event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DEL) {
+            if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DEL) {
                 return super.sendKeyEvent(event);
-            }else if(event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-               return super.sendKeyEvent(event);
-           }
+            } else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                return super.sendKeyEvent(event);
+            }
             return false;
         }
 
@@ -59,13 +61,13 @@ public class CustomEditText extends TextInputEditText {
             if (beforeLength == 1 && afterLength == 0) {
                 // backspace
                 int len = getText().length();
-                if(len==0){
+                if (len == 0) {
                     boolean isBackspace = sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL))
                             && sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
                     return isBackspace;
                 }
-                int selection= getSelectionStart();
-                if(selection==0)
+                int selection = getSelectionStart();
+                if (selection == 0)
                     return false;
             }
             return super.deleteSurroundingText(beforeLength, afterLength);

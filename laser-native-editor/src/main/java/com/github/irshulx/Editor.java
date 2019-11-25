@@ -17,17 +17,14 @@ package com.github.irshulx;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.annotation.ColorRes;
 import android.text.Editable;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.github.irshulx.Components.CustomEditText;
-import com.github.irshulx.models.EditorControl;
-import com.github.irshulx.models.EditorTextStyle;
 import com.github.irshulx.models.EditorContent;
+import com.github.irshulx.models.EditorTextStyle;
 import com.github.irshulx.models.RenderType;
 
 import java.util.Map;
@@ -118,6 +115,7 @@ public class Editor extends EditorCore {
 
     /**
      * size in sp
+     *
      * @param size
      */
     public void setH1TextSize(int size) {
@@ -130,6 +128,7 @@ public class Editor extends EditorCore {
 
     /**
      * size in sp
+     *
      * @param size
      */
     public void setH2TextSize(int size) {
@@ -142,6 +141,7 @@ public class Editor extends EditorCore {
 
     /**
      * size in sp
+     *
      * @param size
      */
     public void setH3TextSize(int size) {
@@ -150,15 +150,17 @@ public class Editor extends EditorCore {
 
     /**
      * size in sp
+     *
      * @param size
      */
-    public void setNormalTextSize(int size){
+    public void setNormalTextSize(int size) {
         getInputExtensions().setNormalTextSize(size);
     }
 
 
     /**
      * set dafault text color in hex
+     *
      * @param color
      */
     public void setEditorTextColor(String color) {
@@ -180,7 +182,7 @@ public class Editor extends EditorCore {
         getInputExtensions().UpdateTextStyle(style, null);
     }
 
-    public void updateTextColor(String color){
+    public void updateTextColor(String color) {
         getInputExtensions().updateTextColor(color, null);
     }
 
@@ -196,6 +198,9 @@ public class Editor extends EditorCore {
         getInputExtensions().appendText(text);
     }
 
+    public Map<Integer, String> getContentTypeface() {
+        return getInputExtensions().getContentTypeface();
+    }
 
     /**
      * setup the fontfaces for editor content
@@ -213,8 +218,8 @@ public class Editor extends EditorCore {
         getInputExtensions().setContentTypeface(map);
     }
 
-    public Map<Integer, String> getContentTypeface() {
-        return getInputExtensions().getContentTypeface();
+    public Map<Integer, String> getHeadingTypeface() {
+        return getInputExtensions().getHeadingTypeface();
     }
 
     /**
@@ -232,16 +237,12 @@ public class Editor extends EditorCore {
         getInputExtensions().setHeadingTypeface(map);
     }
 
-    public Map<Integer, String> getHeadingTypeface() {
-        return getInputExtensions().getHeadingTypeface();
-    }
 
-
-        /*
-         *
-         * Divider extension
-         *
-         */
+    /*
+     *
+     * Divider extension
+     *
+     */
 
     public void setDividerLayout(int layout) {
         this.getDividerExtensions().setDividerLayout(layout);
@@ -251,11 +252,11 @@ public class Editor extends EditorCore {
         getDividerExtensions().insertDivider(-1);
     }
 
-        /*
-         *
-         * Image Extension
-         *
-         */
+    /*
+     *
+     * Image Extension
+     *
+     */
 
     public void setEditorImageLayout(int layout) {
         this.getImageExtensions().setEditorImageLayout(layout);
@@ -266,7 +267,7 @@ public class Editor extends EditorCore {
     }
 
     public void insertImage(Bitmap bitmap) {
-        getImageExtensions().insertImage(bitmap,null, -1,null, true);
+        getImageExtensions().insertImage(bitmap, null, -1, null, true);
     }
 
     public void onImageUploadComplete(String url, String imageId) {
@@ -276,6 +277,7 @@ public class Editor extends EditorCore {
     public void onImageUploadFailed(String imageId) {
         getImageExtensions().onPostUpload(null, imageId);
     }
+
     /*
      *
      *List Item extension
@@ -302,11 +304,11 @@ public class Editor extends EditorCore {
         this.getInputExtensions().setLineSpacing(lineSpacing);
     }
 
-    public void setListItemLineSpacing(float lineSpacing){
+    public void setListItemLineSpacing(float lineSpacing) {
         this.getListItemExtensions().setLineSpacing(lineSpacing);
     }
 
-    public void insertMacro(String name, View view, Map<String,Object> settings) {
+    public void insertMacro(String name, View view, Map<String, Object> settings) {
         this.getMacroExtensions().insertMacro(name, view, settings, -1);
     }
 }

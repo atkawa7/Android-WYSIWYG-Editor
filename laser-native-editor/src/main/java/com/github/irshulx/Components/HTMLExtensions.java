@@ -1,25 +1,14 @@
 package com.github.irshulx.Components;
 
-import android.view.View;
-import android.widget.TableLayout;
-import android.widget.TextView;
-
 import com.github.irshulx.EditorCore;
-import com.github.irshulx.models.EditorContent;
-import com.github.irshulx.models.EditorTextStyle;
 import com.github.irshulx.models.EditorType;
 import com.github.irshulx.models.HtmlTag;
-import com.github.irshulx.models.Node;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Tag;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.github.irshulx.models.TextSetting.TEXT_COLOR;
 
 /**
  * Created by mkallingal on 5/25/2016.
@@ -31,6 +20,14 @@ public class HTMLExtensions {
         this.editorCore = editorCore;
     }
 
+    public static boolean matchesTag(String test) {
+        for (HtmlTag tag : HtmlTag.values()) {
+            if (tag.name().equals(test)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public Map<String, String> getStyleMap(Element element) {
         Map<String, String> keymaps = new HashMap<>();
@@ -65,16 +62,6 @@ public class HTMLExtensions {
 
     private boolean hasChildren(Element element) {
         return element.getAllElements().size() > 0;
-    }
-
-
-    public static boolean matchesTag(String test) {
-        for (HtmlTag tag : HtmlTag.values()) {
-            if (tag.name().equals(test)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public String getTemplateHtml(EditorType child) {

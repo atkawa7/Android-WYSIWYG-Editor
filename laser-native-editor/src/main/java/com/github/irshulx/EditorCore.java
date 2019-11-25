@@ -5,24 +5,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.preference.PreferenceManager;
-import android.text.Editable;
-import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.irshulx.Components.ComponentsWrapper;
 import com.github.irshulx.Components.CustomEditText;
@@ -42,7 +34,6 @@ import com.github.irshulx.models.HtmlTag;
 import com.github.irshulx.models.Node;
 import com.github.irshulx.models.Op;
 import com.github.irshulx.models.RenderType;
-import com.google.gson.Gson;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -50,17 +41,15 @@ import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by mkallingal on 4/30/2016.
  */
 public class EditorCore extends LinearLayout implements View.OnTouchListener {
     public static final String TAG = "EDITOR";
-    private EditorListener listener;
-    private final int MAP_MARKER_REQUEST = 20;
     public final int PICK_IMAGE_REQUEST = 1;
+    private final int MAP_MARKER_REQUEST = 20;
+    private EditorListener listener;
     private InputExtensions inputExtensions;
     private ImageExtensions imageExtensions;
     private ListItemExtensions listItemExtensions;
@@ -81,7 +70,7 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
     }
 
     private void onPostInit() {
-        if(getRenderType() == RenderType.Editor) {
+        if (getRenderType() == RenderType.Editor) {
             setOnTouchListener(this);
         }
     }
@@ -95,7 +84,7 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
         mapExtensions = new MapExtensions(this);
         htmlExtensions = new HTMLExtensions(this);
         macroExtensions = new MacroExtensions(this);
-        componentsWrapper =new ComponentsWrapper.Builder()
+        componentsWrapper = new ComponentsWrapper.Builder()
                 .inputExtensions(inputExtensions)
                 .htmlExtensions(htmlExtensions)
                 .dividerExtensions(dividerExtensions)
@@ -113,27 +102,27 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
     }
 
 
-    public void ___onViewTouched(int hotspot, int viewPosition){
-        if(hotspot == 0){
-            if(!inputExtensions.isInputTextAtPosition(viewPosition-1)) {
+    public void ___onViewTouched(int hotspot, int viewPosition) {
+        if (hotspot == 0) {
+            if (!inputExtensions.isInputTextAtPosition(viewPosition - 1)) {
                 inputExtensions.insertEditText(viewPosition, null, null);
-            }else{
+            } else {
                 Log.d(TAG, "not adding another edittext since already an edittext on the top");
             }
-        }else if(hotspot ==1){
-            if(!inputExtensions.isInputTextAtPosition(viewPosition+1)) {
+        } else if (hotspot == 1) {
+            if (!inputExtensions.isInputTextAtPosition(viewPosition + 1)) {
                 inputExtensions.insertEditText(viewPosition + 1, null, null);
-            }else{
+            } else {
                 Log.d(TAG, "not adding another edittext since already an edittext below");
             }
         }
     }
 
-    public void ___onViewTouched(View view, MotionEvent motionEvent){
+    public void ___onViewTouched(View view, MotionEvent motionEvent) {
         int position = -1;
-        for(int i = 0; i< getChildCount() ; i++){
+        for (int i = 0; i < getChildCount(); i++) {
             boolean withinBound = isViewInBounds(getChildAt(i), motionEvent.getX(), motionEvent.getY());
-            if(withinBound){
+            if (withinBound) {
                 position = i;
             }
         }
@@ -168,25 +157,24 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
 //
 //        }
 
-        if(position == -1){
-             boolean doInsert = true;
-             if(getControlType(getChildAt(getChildCount() - 1)) == EditorType.INPUT){
-                 CustomEditText editText = (CustomEditText) getChildAt(getChildCount() - 1);
-                 if(TextUtils.isEmpty(editText.getText())){
-                     doInsert = false;
-                 }
-             }
-             if(doInsert)
+        if (position == -1) {
+            boolean doInsert = true;
+            if (getControlType(getChildAt(getChildCount() - 1)) == EditorType.INPUT) {
+                CustomEditText editText = (CustomEditText) getChildAt(getChildCount() - 1);
+                if (TextUtils.isEmpty(editText.getText())) {
+                    doInsert = false;
+                }
+            }
+            if (doInsert)
                 inputExtensions.insertEditText(getChildCount(), null, null);
         }
     }
 
-    private boolean isViewInBounds(View view, float x, float y){
+    private boolean isViewInBounds(View view, float x, float y) {
 
         Rect outRect = new Rect(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
 
-        if(outRect.contains((int)x, (int)y))
-        {
+        if (outRect.contains((int) x, (int) y)) {
             return true;
         }
         return false;
@@ -296,14 +284,15 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
     protected DividerExtensions getDividerExtensions() {
         return this.dividerExtensions;
     }
+
     protected MacroExtensions getMacroExtensions() {
         return macroExtensions;
     }
-/*
- *
- *
- *
- */
+    /*
+     *
+     *
+     *
+     */
 
     //endregion
 
@@ -334,11 +323,11 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
     protected EditorContent getContent() {
 
         if (this.editorSettings.renderType == RenderType.Renderer) {
-            Utilities.toastItOut(this.getContext(),"This option only available in editor mode");
+            Utilities.toastItOut(this.getContext(), "This option only available in editor mode");
             return null;
         }
 
-        int childCount =this.editorSettings.parentView.getChildCount();
+        int childCount = this.editorSettings.parentView.getChildCount();
         EditorContent editorState = new EditorContent();
         List<Node> list = new ArrayList<>();
         for (int i = 0; i < childCount; i++) {
@@ -360,7 +349,7 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
                     break;
                 case ul:
                 case ol:
-                    node =getListItemExtensions().getContent(view);
+                    node = getListItemExtensions().getContent(view);
                     list.add(node);
                     break;
                 case map:
@@ -380,7 +369,7 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
 
     protected void renderEditor(EditorContent _state) {
         this.editorSettings.parentView.removeAllViews();
-        this.editorSettings.serialRenderInProgress  = true;
+        this.editorSettings.serialRenderInProgress = true;
         for (Node item : _state.nodes) {
             switch (item.type) {
                 case INPUT:
@@ -410,9 +399,9 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
     protected void parseHtml(String htmlString) {
         Document doc = Jsoup.parse(htmlString);
         for (Element element : doc.body().children()) {
-            if (!HTMLExtensions.matchesTag(element.tagName().toLowerCase())){
+            if (!HTMLExtensions.matchesTag(element.tagName().toLowerCase())) {
                 String tag = element.attr("data-tag");
-                if(!tag.equals("macro")){
+                if (!tag.equals("macro")) {
                     continue;
                 }
             }
@@ -424,7 +413,7 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
         String text;
 
         String macroTag = element.attr("data-tag");
-        if(macroTag.equals("macro")){
+        if (macroTag.equals("macro")) {
             macroExtensions.buildNodeFromHTML(element);
             return;
         }
@@ -432,7 +421,7 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
         HtmlTag tag = HtmlTag.valueOf(element.tagName().toLowerCase());
         int count = getParentView().getChildCount();
 
-        if ("br".equals(tag.name()) ||"<br>".equals(element.html().replaceAll("\\s+", "")) || "<br/>".equals(element.html().replaceAll("\\s+", ""))) {
+        if ("br".equals(tag.name()) || "<br>".equals(element.html().replaceAll("\\s+", "")) || "<br/>".equals(element.html().replaceAll("\\s+", ""))) {
             inputExtensions.insertEditText(count, null, null);
             return;
         } else if ("hr".equals(tag.name()) || "<hr>".equals(element.html().replaceAll("\\s+", "")) || "<hr/>".equals(element.html().replaceAll("\\s+", ""))) {
@@ -459,7 +448,7 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
                 String dataTag = element.attr("data-tag");
                 if (dataTag.equals("img")) {
                     imageExtensions.buildNodeFromHTML(element);
-                }else{
+                } else {
                     inputExtensions.buildNodeFromHTML(element);
                 }
                 break;
@@ -489,7 +478,7 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
                     htmlBlock.append(dividerExtensions.getContentAsHTML(item, content));
                     break;
                 case map:
-                    String htmlMap = mapExtensions.getContentAsHTML(item,content);
+                    String htmlMap = mapExtensions.getContentAsHTML(item, content);
                     htmlBlock.append(htmlMap);
                     break;
                 case ul:
@@ -520,8 +509,6 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
         this.editorSettings.parentView.removeAllViews();
 
     }
-
-
 
 
     private void loadStateFromAttrs(AttributeSet attributeSet) {
@@ -642,7 +629,7 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
         if (index == 0)
             return;
         EditorControl contentType = (EditorControl) ((View) view.getParent()).getTag();
-          /*
+        /*
          *
          * If the person was on an active ul|li, move him to the previous node
          *
@@ -668,11 +655,11 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
          */
 
         if (control.Type == EditorType.ol || control.Type == EditorType.ul) {
-         /*
-         *
-         * previous node on the editor is a list, set focus to its inside
-         *
-         */
+            /*
+             *
+             * previous node on the editor is a list, set focus to its inside
+             *
+             */
             this.editorSettings.parentView.removeView(view);
             listItemExtensions.setFocusToList(toFocus, ListItemExtensions.POSITION_END);
         } else {
@@ -732,7 +719,7 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
     }
 
 
-    private Node getNodeInstance(View view){
+    private Node getNodeInstance(View view) {
         Node node = new Node();
         EditorType type = getControlType(view);
         node.type = type;
@@ -741,14 +728,11 @@ public class EditorCore extends LinearLayout implements View.OnTouchListener {
     }
 
 
-
-
     public boolean isLastRow(View view) {
         int index = this.editorSettings.parentView.indexOfChild(view);
         int length = this.editorSettings.parentView.getChildCount();
         return length - 1 == index;
     }
-
 
 
     public boolean onKey(View v, int keyCode, KeyEvent event, CustomEditText editText) {

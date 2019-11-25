@@ -10,8 +10,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.irshulx.EditorCore;
 import com.github.irshulx.EditorComponent;
+import com.github.irshulx.EditorCore;
 import com.github.irshulx.R;
 import com.github.irshulx.Utilities.Utilities;
 import com.github.irshulx.models.EditorContent;
@@ -78,7 +78,7 @@ public class MacroExtensions extends EditorComponent {
 
         editorCore.getParentView().addView(frameLayout, index);
 
-        if(editorCore.getRenderType() == RenderType.Renderer) return;
+        if (editorCore.getRenderType() == RenderType.Renderer) return;
 
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -89,9 +89,8 @@ public class MacroExtensions extends EditorComponent {
                     int height = view.getHeight();
                     if (event.getY() < paddingTop) {
                         editorCore.___onViewTouched(0, editorCore.getParentView().indexOfChild(frameLayout));
-                    }
-                    else if (event.getY() > height - paddingBottom) {
-                        editorCore.___onViewTouched(1,  editorCore.getParentView().indexOfChild(frameLayout));
+                    } else if (event.getY() > height - paddingBottom) {
+                        editorCore.___onViewTouched(1, editorCore.getParentView().indexOfChild(frameLayout));
                     } else {
                         if (overlay.getVisibility() == View.VISIBLE) {
                             overlay.setVisibility(View.GONE);
@@ -108,7 +107,7 @@ public class MacroExtensions extends EditorComponent {
         frameLayout.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if(!b){
+                if (!b) {
                     overlay.setVisibility(View.GONE);
                 }
             }
@@ -129,19 +128,19 @@ public class MacroExtensions extends EditorComponent {
         return getAsHtml(node.content.get(0), node.macroSettings);
     }
 
-    private String getAsHtml(String name, Map<String, Object> macroSettings){
+    private String getAsHtml(String name, Map<String, Object> macroSettings) {
         String template = "<{{$tag}} data-tag=\"macro\" {{$settings}}></{{$tag}}>";
         template = template.replace("{{$tag}}", name);
         StringBuilder dataTags = new StringBuilder();
         for (Map.Entry<String, Object> item : macroSettings.entrySet()) {
 
-            if(item.getKey().equalsIgnoreCase("data-tag")) continue;
+            if (item.getKey().equalsIgnoreCase("data-tag")) continue;
 
 
             dataTags.append(" ");
-            if(item.getKey().contains("data-")){
+            if (item.getKey().contains("data-")) {
                 dataTags.append(item.getKey());
-            }else {
+            } else {
                 dataTags.append("data-" + item.getKey());
             }
             dataTags.append("=\"").append(String.valueOf(item.getValue())).append("\"");
@@ -159,16 +158,16 @@ public class MacroExtensions extends EditorComponent {
         int index = editorCore.getChildCount();
         View view = editorCore.getEditorListener().onRenderMacro(node.content.get(0), node.macroSettings, editorCore.getChildCount());
 
-        if(view == null)
-            view = getEmptyMacro(node.content.get(0),node.macroSettings);
+        if (view == null)
+            view = getEmptyMacro(node.content.get(0), node.macroSettings);
 
         insertMacro(node.content.get(0), view, node.macroSettings, index);
     }
 
-    private View getEmptyMacro(String name, Map<String, Object> macroSettings){
+    private View getEmptyMacro(String name, Map<String, Object> macroSettings) {
         final View layout = ((Activity) editorCore.getContext()).getLayoutInflater().inflate(R.layout.default_macro, null);
         TextView message = layout.findViewById(R.id.txtMessage);
-        message.setText("Unhandled macro "+ "\""+getAsHtml(name,macroSettings)+"\"");
+        message.setText("Unhandled macro " + "\"" + getAsHtml(name, macroSettings) + "\"");
         return layout;
     }
 
@@ -189,7 +188,7 @@ public class MacroExtensions extends EditorComponent {
         int index = editorCore.getChildCount();
         View view = editorCore.getEditorListener().onRenderMacro(tag, node.macroSettings, editorCore.getChildCount());
 
-        if(view == null)
+        if (view == null)
             view = getEmptyMacro(node.content.get(0), node.macroSettings);
 
         insertMacro(tag, view, node.macroSettings, index);
